@@ -26,3 +26,27 @@ class UploadTest(TestCase):
             self.assertIn('errors', data)
             self.assertIsInstance(data['errors'], dict)
             self.assertIn('file', data['errors'])
+
+    def assert_not_allowed(self, response):
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.content, '')
+
+    def test_get(self):
+        res = self.client.get('/upload')
+        self.assert_not_allowed(res)
+
+    def test_put(self):
+        res = self.client.put('/upload')
+        self.assert_not_allowed(res)
+
+    def test_patch(self):
+        res = self.client.patch('/upload')
+        self.assert_not_allowed(res)
+
+    def test_delete(self):
+        res = self.client.delete('/upload')
+        self.assert_not_allowed(res)
+
+    def test_options(self):
+        res = self.client.options('/upload')
+        self.assert_not_allowed(res)

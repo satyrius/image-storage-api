@@ -1,7 +1,10 @@
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
 from .forms import UploadFileForm
 
 
+@require_POST
 def upload(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
