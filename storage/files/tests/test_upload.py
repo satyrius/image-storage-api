@@ -34,6 +34,8 @@ class UploadTest(TestCase):
             self.assertIn('name', data)
             self.assertNotEqual(data['name'], self.filename)
             self.assertEqual(data['name'], self.uploaded_name)
+            self.assertIn('size', data)
+            self.assertEqual(data['size'], path.getsize(self.filename))
 
     def test_upload_not_an_image(self):
         with open(__file__, 'r') as f:
