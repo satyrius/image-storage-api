@@ -1,6 +1,10 @@
 import json
 from os import path
+
 from django.test import TestCase
+from django.core.files.storage import Storage
+
+from mock import patch
 
 
 class UploadTest(TestCase):
@@ -8,6 +12,14 @@ class UploadTest(TestCase):
 
     def setUp(self):
         self.filename = path.join(path.dirname(__file__), 'my_dog.jpg')
+
+        self.uploaded_name = '/my/dog/uploaded.jpg'
+        self.patcher = patch.object(
+            Storage, 'save', return_value=self.uploaded_name)
+        self.storage_save = self.patcher.start()
+
+    def tearDown(self):
+        self.patcher.stop()
 
     def upload(self, file, expected_code=200):
         res = self.client.post('/upload', data={'file': file})
@@ -19,6 +31,9 @@ class UploadTest(TestCase):
         with open(self.filename, 'r') as f:
             data = self.upload(f)
             self.assertNotIn('errors', data)
+            self.assertIn('name', data)
+            self.assertNotEqual(data['name'], self.filename)
+            self.assertEqual(data['name'], self.uploaded_name)
 
     def test_upload_not_an_image(self):
         with open(__file__, 'r') as f:

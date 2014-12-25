@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
@@ -12,8 +13,9 @@ def upload(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             file = form.files['file']
+            name = default_storage.save(None, file)
             return JsonResponse({
-                'name': file.name,
+                'name': name,
                 'size': file.size,
             })
         else:
