@@ -31,9 +31,9 @@ class UploadTest(TestCase):
         with open(self.filename, 'r') as f:
             data = self.upload(f)
             self.assertNotIn('errors', data)
-            self.assertIn('name', data)
-            self.assertNotEqual(data['name'], self.filename)
-            self.assertEqual(data['name'], self.uploaded_name)
+            self.assertIn('uri', data)
+            self.assertNotEqual(data['uri'], self.filename)
+            self.assertEqual(data['uri'], self.uploaded_name)
             self.assertIn('size', data)
             self.assertEqual(data['size'], path.getsize(self.filename))
 

@@ -15,7 +15,7 @@ def upload(request):
             file = form.files['file']
             name = default_storage.save(None, file)
             return JsonResponse({
-                'name': name,
+                'uri': name,
                 'size': file.size,
             })
         else:
